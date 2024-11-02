@@ -34,7 +34,6 @@ import {
 import * as z from "zod";
 import { contractABI, contractAddress } from "../lib/contract.config";
 import TokenEnum from "../lib/enums/token.enum";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const faucetSchema = z.object({
   token: z.string().min(1),
@@ -169,10 +168,10 @@ const Home: NextPage = () => {
         </DialogContent>
       </Dialog>
       {isConnected && (
-        <div className="rounded-lg p-4 flex flex-col justify-between w-full lg:w-[70vw]">
-          <h1 className="text-4xl font-bold">Faucet</h1>
-          <p className="text-lg text-gray-500 mt-2">
-            Get 1 token every day for free
+        <div className="rounded-lg p-4 flex flex-col justify-between w-[70vw]">
+          <p className="text-xl font-bold">Get Tokens</p>
+          <p className="text-sm text-gray-400">
+            Get tokens to test my web3 applications
           </p>
           <Form {...form}>
             <form
@@ -209,21 +208,14 @@ const Home: NextPage = () => {
                   </FormItem>
                 )}
               />
-              <p className="text-md">Current balance: {balance}</p>
-              <Button variant="default" type="submit">
+              <p>Current balance: {balance}</p>
+              <Button variant="outline" type="submit">
                 Send Request
               </Button>
             </form>
           </Form>
         </div>
       )}
-      {
-        !isConnected && <div className="flex flex-col items-center gap-2">
-          <h4 className="text-3xl text-center">Connect Wallet</h4>
-          <p className="text-lg font-light mb-4">Please connect your wallet to use this service</p>
-          <ConnectButton/>
-        </div>
-      }
     </main>
   );
 };
