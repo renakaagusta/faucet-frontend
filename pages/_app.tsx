@@ -1,23 +1,22 @@
-import Footer from "@/components/footer";
-import Header from "@/components/header";
+import Footer from "@/components/footer/footer";
+import Header from "@/components/header/header";
+import { wagmiConfig } from "@/configs/wagmi";
 import {
   Chain,
   darkTheme,
-  getDefaultWallets,
-  lightTheme,
-  RainbowKitProvider,
+  RainbowKitProvider
 } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import type { AppProps } from "next/app";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { publicProvider } from "wagmi/providers/public";
+import { WagmiProvider } from "wagmi";
+import { arbitrumSepolia } from "wagmi/chains";
 import "../styles/globals.css";
 
-const ganacheChain: Chain = {
+const localChain: Chain = {
   id: 1337,
   name: "Ganache",
-  network: "ganache",
   nativeCurrency: {
     decimals: 18,
     name: "Ganache Ether",
@@ -40,46 +39,32 @@ const ganacheChain: Chain = {
   testnet: true,
 };
 
-const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [ganacheChain],
-  [publicProvider()]
-);
-
-const { connectors } = getDefaultWallets({
-  appName: "Faucet",
-  projectId: "c8d08053460bfe0752116d730dc6393b",
-  chains,
-});
-
-const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors,
-  publicClient,
-  webSocketPublicClient,
-});
+const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider
-        chains={chains}
-        theme={darkTheme({
-          accentColor: 'white',
-          accentColorForeground: 'black',
-        })}
-      >
-        <ThemeProvider
-          disableTransitionOnChange
-          attribute="class"
-          value={{ light: "light", dark: "dark" }}
-          defaultTheme="system"
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider
+          initialChain={arbitrumSepolia}
+          theme={darkTheme({
+            accentColor: 'white',
+            accentColorForeground: 'black',
+          })}
         >
-          <Header />
-          <Component {...pageProps} />
-          <Footer />
-        </ThemeProvider>
-      </RainbowKitProvider>
-    </WagmiConfig>
+          <ThemeProvider
+            disableTransitionOnChange
+            attribute="class"
+            value={{ light: "light", dark: "dark" }}
+            defaultTheme="system"
+          >
+            <Header />
+            <Component {...pageProps} />
+            <Footer />
+          </ThemeProvider>
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }
 

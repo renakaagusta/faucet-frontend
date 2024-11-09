@@ -1,4 +1,4 @@
-import useCurrentTheme from "@/hooks/theme";
+import useCurrentTheme from "@/hooks/styles/theme";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Menu, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -10,19 +10,12 @@ import {
   useEnsAvatar,
   useEnsName,
 } from "wagmi";
-import { Button } from "./button/button";
+import { Button } from "../button/button";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "./sheet/sheet";
-import { Label } from "./label/label";
-import { Input } from "./input/input";
+  SheetTrigger
+} from "../sheet/sheet";
 
 const Header = () => {
   const { setTheme } = useTheme();
